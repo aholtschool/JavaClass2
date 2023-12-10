@@ -30,7 +30,7 @@ public class OrderManagementSystem {
     // Static block to initialize logger and database connection
     static {
         // Set the logging level to SEVERE
-        logger.setLevel(Level.SEVERE);
+        logger.setLevel(Level.ALL);
         try {
             // FileHandler for logging to a file
             FileHandler fileHandler = new FileHandler("mylog.log");
@@ -46,6 +46,7 @@ public class OrderManagementSystem {
                     e.printStackTrace();
                 }
             }
+            
 
             // Establish database connection
             connection = DriverManager.getConnection("jdbc:mysql://localhost/the_shop", "root", "root");
@@ -176,6 +177,23 @@ public class OrderManagementSystem {
             } catch (SQLException e) {
                 logger.log(Level.SEVERE, "Error closing the database connection", e);
                 e.printStackTrace();
+                
+             // Additional interactions
+                System.out.println("Do you want to update or delete an order? (type 'u' to update, 'd' to delete, or 'n' to exit):");
+                String choice = scanner.next();
+
+                if (choice.equalsIgnoreCase("u")) {
+                    System.out.println("Enter the ID of the order to update:");
+                    int orderId = scanner.nextInt();
+                    System.out.println("Enter the updated order text:");
+                    String updatedOrderText = scanner.next();
+                    orderManagementSystem.updateOrderInDatabase(orderId, updatedOrderText);
+                } else if (choice.equalsIgnoreCase("d")) {
+                    System.out.println("Enter the ID of the order to delete:");
+                    int orderId = scanner.nextInt();
+                    orderManagementSystem.deleteOrderFromDatabase(orderId);
+                }
+
             }
         }
     }
@@ -187,6 +205,28 @@ public class OrderManagementSystem {
 
 	private void updateOrderInDatabase(int orderId, String updatedOrderText) {
 		// TODO Auto-generated method stub
-		
-	}
+		    try {
+		        // Prepare the update statement
+		        String updateQuery = "UPDATE orders SET order_text = ? WHERE id = ?";
+		        try (PreparedStatement statement = connection.prepareStatement(updateQuery)) {
+		            // Set the updated order text and order ID as parameters
+		            statement.setString(1, updatedOrderText);
+		            statement.setInt(2, orderId);
+
+		            // Execute the update statement
+		            int rowsAffected = statement.executeUpdate();
+
+		            // Check if the update was successful
+		            if (rowsAffected > 0) {
+		                logger.info("Order updated successfully. Order ID: " + orderId);
+		            } else {
+		                logger.warning("No order found with ID: " + orderId);
+		            }
+		        }
+		    } catch (SQLException e) {
+		        // Log error if updating order in the database fails
+		        logger.log(Level.SEVERE, "Error updating order in the database", e);
+		    }
+		}
 }
+
