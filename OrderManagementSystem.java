@@ -16,7 +16,95 @@ import java.io.IOException;
 import java.io.InputStream;
 
 // Class definition for OrderManagementSystem
+//OrderManagementSystem.java
+
 public class OrderManagementSystem {
+ // ...
+
+ public static void main(String[] args) {
+     OrderManagementSystem orderManagementSystem = new OrderManagementSystem();
+
+     // Create an order
+     Order newOrder = new Order(1, "John Doe", "ProductA", 5);
+     
+     // Add the order
+     orderManagementSystem.addOrder(newOrder);
+         Scanner scanner = new Scanner(System.in);
+
+         try {
+             String choice = "y";
+
+             System.out.println("Welcome to The Shop!");
+
+             char sel;
+             do {
+                 System.out.println("Please enter the price of your item:");
+                 String orderText = scanner.next();
+                 orderManagementSystem.addOrder(orderText);
+
+                 System.out.println("Please continue with your order (type 'y' to continue or 'q' when you are finished):");
+                 choice = scanner.next();
+             } while (choice.equalsIgnoreCase("y"));
+
+             orderManagementSystem.printOrders();
+
+             // Additional interactions
+             System.out.println("Do you want to update or delete an order? (type 'u' to update, 'd' to delete, or 'n' to exit):");
+             choice = scanner.next();
+
+             if (choice.equalsIgnoreCase("u")) {
+                 System.out.println("Enter the ID of the order to update:");
+                 int orderId = scanner.nextInt();
+                 System.out.println("Enter the updated order text:");
+                 String updatedOrderText = scanner.next();
+                 orderManagementSystem.updateOrderInDatabase(orderId, updatedOrderText);
+             } else if (choice.equalsIgnoreCase("d")) {
+                 System.out.println("Enter the ID of the order to delete:");
+                 int orderId = scanner.nextInt();
+                 orderManagementSystem.deleteOrderFromDatabase(orderId);
+             }
+
+             System.out.println("Do you want to place another order? (type 'y' to continue or 'n' to exit):");
+             choice = scanner.next();
+
+         } finally {
+             try {
+                 if (connection != null) {
+                     connection.close();
+                     logger.info("Database connection closed.");
+                 }
+                 if (scanner != null) {
+                     scanner.close();
+                 }
+             } catch (SQLException e) {
+                 logger.log(Level.SEVERE, "Error closing the database connection", e);
+                 e.printStackTrace();
+                 
+              // Additional interactions
+                 System.out.println("Do you want to update or delete an order? (type 'u' to update, 'd' to delete, or 'n' to exit):");
+                 String choice = scanner.next();
+
+                 if (choice.equalsIgnoreCase("u")) {
+                     System.out.println("Enter the ID of the order to update:");
+                     int orderId = scanner.nextInt();
+                     System.out.println("Enter the updated order text:");
+                     String updatedOrderText = scanner.next();
+                     orderManagementSystem.updateOrderInDatabase(orderId, updatedOrderText);
+                 } else if (choice.equalsIgnoreCase("d")) {
+                     System.out.println("Enter the ID of the order to delete:");
+                     int orderId = scanner.nextInt();
+                     orderManagementSystem.deleteOrderFromDatabase(orderId);
+                 }
+
+             }
+         }
+     // ...
+ }
+
+ public void addOrder(Order order) {
+     // Process and save the order
+     // ...
+ }
 
     // List to store orders
     private List<String> orders;
@@ -124,80 +212,6 @@ public class OrderManagementSystem {
         return databaseOrders;
     }
 
-    // Main method for running the application
-    public static void main(String[] args) {
-        OrderManagementSystem orderManagementSystem = new OrderManagementSystem();
-        Scanner scanner = new Scanner(System.in);
-
-        try {
-            String choice = "y";
-
-            System.out.println("Welcome to The Shop!");
-
-            char sel;
-            do {
-                System.out.println("Please enter the price of your item:");
-                String orderText = scanner.next();
-                orderManagementSystem.addOrder(orderText);
-
-                System.out.println("Please continue with your order (type 'y' to continue or 'q' when you are finished):");
-                choice = scanner.next();
-            } while (choice.equalsIgnoreCase("y"));
-
-            orderManagementSystem.printOrders();
-
-            // Additional interactions
-            System.out.println("Do you want to update or delete an order? (type 'u' to update, 'd' to delete, or 'n' to exit):");
-            choice = scanner.next();
-
-            if (choice.equalsIgnoreCase("u")) {
-                System.out.println("Enter the ID of the order to update:");
-                int orderId = scanner.nextInt();
-                System.out.println("Enter the updated order text:");
-                String updatedOrderText = scanner.next();
-                orderManagementSystem.updateOrderInDatabase(orderId, updatedOrderText);
-            } else if (choice.equalsIgnoreCase("d")) {
-                System.out.println("Enter the ID of the order to delete:");
-                int orderId = scanner.nextInt();
-                orderManagementSystem.deleteOrderFromDatabase(orderId);
-            }
-
-            System.out.println("Do you want to place another order? (type 'y' to continue or 'n' to exit):");
-            choice = scanner.next();
-
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                    logger.info("Database connection closed.");
-                }
-                if (scanner != null) {
-                    scanner.close();
-                }
-            } catch (SQLException e) {
-                logger.log(Level.SEVERE, "Error closing the database connection", e);
-                e.printStackTrace();
-                
-             // Additional interactions
-                System.out.println("Do you want to update or delete an order? (type 'u' to update, 'd' to delete, or 'n' to exit):");
-                String choice = scanner.next();
-
-                if (choice.equalsIgnoreCase("u")) {
-                    System.out.println("Enter the ID of the order to update:");
-                    int orderId = scanner.nextInt();
-                    System.out.println("Enter the updated order text:");
-                    String updatedOrderText = scanner.next();
-                    orderManagementSystem.updateOrderInDatabase(orderId, updatedOrderText);
-                } else if (choice.equalsIgnoreCase("d")) {
-                    System.out.println("Enter the ID of the order to delete:");
-                    int orderId = scanner.nextInt();
-                    orderManagementSystem.deleteOrderFromDatabase(orderId);
-                }
-
-            }
-        }
-    }
-
 	private void deleteOrderFromDatabase(int orderId) {
 		// TODO Auto-generated method stub
 		
@@ -229,4 +243,3 @@ public class OrderManagementSystem {
 		    }
 		}
 }
-
