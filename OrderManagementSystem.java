@@ -19,17 +19,45 @@ import java.io.InputStream;
 //OrderManagementSystem.java
 
 public class OrderManagementSystem {
- // ...
-
+	
+//Logger for logging events
+	private static final Logger logger = Logger.getLogger(OrderManagementSystem.class.getName());
+	//Database Connection
+    private static Connection connection;
+    
  public static void main(String[] args) {
+	 initialize();
+	 
+	 //DATABASE INTERACTION - Initialize the Scanner
+	 Scanner scanner = new Scanner(System.in);
+	 
+	 // Additional interactions for user management
+     System.out.println("User Management Menu:");
+     System.out.println("1. Add User");
+     System.out.println("2. Display Users");
+     System.out.print("Enter your choice: ");
+     int userChoice = scanner.nextInt();
+     
+     switch (userChoice) {
+     case 1:
+         addUser();
+         break;
+     case 2:
+         displayUsers();
+         break;
+     default:
+         System.out.println("Invalid choice...The system will continue with order management.");
+ }
+
+     //Order Management
      OrderManagementSystem orderManagementSystem = new OrderManagementSystem();
+     processOrders(scanner, orderManagementSystem);
 
      // Create an order
      Order newOrder = new Order(1, "John Doe", "ProductA", 5);
      
-     // Add the order
+     // DATABASE INTERACTION - Add the order
      orderManagementSystem.addOrder(newOrder);
-         Scanner scanner = new Scanner(System.in);
 
          try {
              String choice = "y";
@@ -48,7 +76,7 @@ public class OrderManagementSystem {
 
              orderManagementSystem.printOrders();
 
-             // Additional interactions
+             // DATABASE INTERACTIONS - updateOrderInDatabase & deleteOrderFromDatabase
              System.out.println("Do you want to update or delete an order? (type 'u' to update, 'd' to delete, or 'n' to exit):");
              choice = scanner.next();
 
@@ -80,40 +108,130 @@ public class OrderManagementSystem {
                  logger.log(Level.SEVERE, "Error closing the database connection", e);
                  e.printStackTrace();
                  
-              // Additional interactions
+              // DATABASE INTERACTIONS
                  System.out.println("Do you want to update or delete an order? (type 'u' to update, 'd' to delete, or 'n' to exit):");
                  String choice = scanner.next();
 
                  if (choice.equalsIgnoreCase("u")) {
-                     System.out.println("Enter the ID of the order to update:");
+                     System.out.println("Enter the ID of the you would like to order to update:");
                      int orderId = scanner.nextInt();
                      System.out.println("Enter the updated order text:");
                      String updatedOrderText = scanner.next();
                      orderManagementSystem.updateOrderInDatabase(orderId, updatedOrderText);
                  } else if (choice.equalsIgnoreCase("d")) {
-                     System.out.println("Enter the ID of the order to delete:");
+                     System.out.println("Enter the ID of the order that you would like to delete:");
                      int orderId = scanner.nextInt();
                      orderManagementSystem.deleteOrderFromDatabase(orderId);
                  }
-
              }
          }
-     // ...
  }
 
- public void addOrder(Order order) {
-     // Process and save the order
-     // ...
+ private static void initialize() {
+	// TODO Auto-generated method stub
+	
+}
+
+private void addOrder(Order newOrder) {
+	// TODO Auto-generated method stub
+	
+}
+
+private static void closeResources(Scanner scanner) {
+	// TODO Auto-generated method stub
+	
+}
+
+private static void processOrders(Scanner scanner, OrderManagementSystem orderManagementSystem) {
+	// TODO Auto-generated method stub
+	
+}
+
+private static int getUserManagementChoice(Scanner scanner) {
+	// TODO Auto-generated method stub
+	return 0;
+}
+
+private static void displayUsers() {
+	// TODO Auto-generated method stub
+	 System.out.println("Display Users Functionality Placeholder");
+	
+}
+ private static void createUsersTable() {
+	 //TODO: Implement logic to create the users table
+	 System.out.println("Create Users Table Functionality Placeholder");
  }
+
+//Database Interaction - add User
+ private static void addUser() {
+     try {
+    	 Scanner scanner = new Scanner(System.in);
+         // Take user input for first name, last name, phone number, and email
+         System.out.print("Enter First Name: ");
+         String firstName = scanner.next();
+
+         System.out.print("Enter Last Name: ");
+         String lastName = scanner.next();
+
+         System.out.print("Enter Phone Number: ");
+         String phoneNumber = scanner.next();
+
+         System.out.print("Enter Email: ");
+         String email = scanner.next();
+
+         // Call a method to add user to the database
+         addUserToDatabase(firstName, lastName, phoneNumber, email);
+
+         logger.info("User's info added successfully.");
+
+     } catch (Exception e) {
+         logger.log(Level.SEVERE, "Error adding user", e);
+     }
+ }
+
+ //private static void displayUsers() {
+    // try {
+         // Call a method to fetch and display users from the database
+     //    List<String> users = fetchUsersFromDatabase();
+
+    //     System.out.println("Users from the Database:");
+      //   for (String user : users) {
+        //     System.out.println(user);
+         //}
+
+ //    } catch (Exception e) {
+   //      logger.log(Level.SEVERE, "Error displaying users", e);
+    // }
+ //}
+
+ private static void addUserToDatabase(String firstName, String lastName, String phoneNumber, String email) {
+     // TODO: Implement the logic to add a user to the database
+     System.out.println("Add User to Database Functionality Placeholder");
+ }
+
+ //private static List<String> fetchUsersFromDatabase() {
+     // TODO: Implement the logic to fetch users from the database
+     //System.out.println("Fetch Users From Database Functionality Placeholder");
+     //return new ArrayList<>();
+ //}
+
+         //    users.add(user);
+       //  }
+
+    // } catch (SQLException e) {
+    //     logger.log(Level.SEVERE, "Error fetching users from the database", e);
+   //  }
+     //return users;
+ 
 
     // List to store orders
     private List<String> orders;
     
     // Logger for logging events
-    private static final Logger logger = Logger.getLogger(OrderManagementSystem.class.getName());
+    //private static final Logger logger = Logger.getLogger(OrderManagementSystem.class.getName());
     
     // Database connection
-    private static Connection connection;
+    //private static Connection connection;
 
     // Static block to initialize logger and database connection
     static {
@@ -150,6 +268,7 @@ public class OrderManagementSystem {
     }
 
     // Method to create orders table in the database
+    //Database Interaction - Create Table
     private static void createTable() {
         try (PreparedStatement statement = connection.prepareStatement(
                 "CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY AUTO_INCREMENT, order_text TEXT)")) {
@@ -194,6 +313,7 @@ public class OrderManagementSystem {
     }
 
     // Method to fetch orders from the database
+    //Database Interaction - Fetch orders from database
     private List<String> fetchOrdersFromDatabase() {
         List<String> databaseOrders = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM orders");
